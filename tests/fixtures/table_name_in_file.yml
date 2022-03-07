@@ -1,0 +1,6 @@
+---
+people:
+  - id: 99
+    firstname: Alice
+    lastname: Alison
+    age: 42
