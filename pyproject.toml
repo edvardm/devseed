@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "devseed"
-version = "2022.10.1003+alpha"
+version = "2022.10.1004+alpha"
 description = "Tool to seed database using YAML files"
 authors = ["Edvard Majakari <edvard@majakari.net>"]
 
@@ -13,8 +13,10 @@ environs = "^9.5.0"
 pendulum = "^2.1.2"
 PyPika = "^0.48.8"
 pg8000 = "^1.24.1"
+rich = "^11.2.0"
 
 [tool.poetry.dev-dependencies]
+mypy = "^0.931"
 types-PyYAML = "^6.0.4"
 pytest = "^7.0.1"
 pytest-describe = "^2.0.1"
@@ -32,7 +34,7 @@ build-backend = "poetry.core.masonry.api"
 devseed = "devseed.devseed:app"
 
 [tool.bumpver]
-current_version = "2022.10.1003+alpha"
+current_version = "2022.10.1004+alpha"
 version_pattern = "YYYY.0W.BUILD[+TAG]"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true

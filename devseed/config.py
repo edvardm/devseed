@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import environs
 
 env = environs.Env()
@@ -12,3 +14,6 @@ _CONFIG_BASE = (
 )
 CFG_PATH = _CONFIG_BASE / "devseedrc"
 DB_TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+
+DEFAULT_SEED_DIR = Path("db/seed")
+DEFAULT_GLOB = "*.yml"
