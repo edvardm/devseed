@@ -92,7 +92,7 @@ def insert(db_conn, schema: str, seed_dir: Path, glob: str) -> None:
     db_conn.commit()
 
 
-def files_to_sql(seed_dir: Path, glob: str, schema:str = ''):
+def files_to_sql(seed_dir: Path, glob: str, schema: str = ""):
     for pth in seed_dir.rglob(glob):
         entries = _parse_yaml(pth)
 
