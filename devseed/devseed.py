@@ -50,6 +50,7 @@ def seed(
     )
     try:
         with db.build_conn(db_name=db_name, dry_run=dry_run) as conn:
+            # TODO: replace with dispatcher
             if import_from:
                 if not out:
                     abort("--out needed for importing data")
@@ -59,14 +60,11 @@ def seed(
                     abort(f"Output file {out} already exists, quitting")
 
                 with out.open("w") as fh:
-                    import_yaml_from_table(
-                        ctx,
-                        conn,
-                        fh,
-                    )
+                    import_yaml_from_table(ctx, conn, fh)
             else:
                 insert(conn, schema, seed_dir, glob)
     except DatabaseError as exc:
+        # TODO: cleanup
         err = exc.args[0]
         msg = err["M"]
         detail = err["D"]
@@ -76,6 +74,7 @@ def seed(
 def import_yaml_from_table(ctx: Params, conn, out: TextIO):
     cols, records = db.table_sample(ctx, conn)
 
+    # TODO: ugly & move to transformers
     out.write("---\n")  # not needed, but good practise in YAML
     for rec in records:
         for idx, (key, val) in enumerate(zip(cols, rec)):
