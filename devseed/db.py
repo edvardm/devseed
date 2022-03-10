@@ -51,13 +51,10 @@ def table_sample(
     # small amount of records for people to easily understand/know
     # what is there, hence limit
 
-    def quote(tbl_name):
-        return f'"{ctx.schema}".{tbl_name}' if ctx.schema else tbl_name
-
     cur = conn.cursor()
-    table = ctx.import_from
 
-    query = f"SELECT * from {quote(table)} ORDER BY random() LIMIT {ctx.limit}"
+    # TODO: use Pypika to build this, improves security too
+    query = f"SELECT * from {quote(ctx.schema, ctx.import_from)} ORDER BY random() LIMIT {ctx.limit}"  # nosec
     if ctx.verbose:
         output(query)
 
@@ -69,3 +66,7 @@ def table_sample(
     # cur.fetchmany() would be cleaner if we had large amounts of data,
     # but for this fetchall() should be fine
     return cols, cur.fetchall()
+
+
+def quote(schema, tbl_name):
+    return f'"{schema}".{tbl_name}' if schema else tbl_name
