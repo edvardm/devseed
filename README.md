@@ -1,8 +1,8 @@
 ## Overview
 
-Simple tool to seed database using YAML files. Run
+Simple tool to seed database using YAML files, version 0.1.2
 
-`devseed --help` for usage.
+Run `devseed --help` for usage.
 
 ## Quickstart
 

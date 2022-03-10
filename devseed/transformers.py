@@ -5,9 +5,10 @@ from typing import Any
 
 import funcy
 import pendulum
-from pypika import Query, Table
+from pypika import Query, Schema, Table
 
 from devseed import config
+from devseed.types import Params
 
 _TRANSFORMATIONS = {
     "uuid4()": lambda: str(uuid.uuid4()),
@@ -27,9 +28,11 @@ def warn(msg):
     logging.warning(msg)
 
 
-def _to_query(tbl: str, dct: dict[str, Any]):
+def _to_query(schema: str, tbl: str, dct: dict[str, Any]):
     cols, vals = zip(*dct.items())
-    return Query.into(Table(tbl)).columns(cols).insert(vals)
+
+    table = Table(tbl, schema=Schema(schema) if schema else None)
+    return Query.into(table).columns(cols).insert(vals)
 
 
 def transform(val):
@@ -46,7 +49,23 @@ def _fmt_time(dtime):
     dtime.in_tz("UTC").strftime(config.DB_TIME_FORMAT)
 
 
-def _seed_to_db(table_name: str, elem: dict) -> str:
+def dict_to_sql(schema: str, table_name: str, elem: dict) -> str:
     transformed = funcy.walk_values(transform, elem)
 
-    return _to_query(table_name, transformed)
+    return _to_query(schema, table_name, transformed)
+
+
+def to_yaml_value(ctx: Params, val):
+    del ctx  # Unused
+    # print(val, type(val))
+    if val is None:
+        return "null"
+
+    if isinstance(val, str):
+        return f'"{val}"' if any(char in val for char in (":", "[")) else val
+
+    if isinstance(val, (pendulum.DateTime, datetime.datetime)):
+        new_val = pendulum.instance(val).in_tz("UTC")
+        return f'"{new_val}"'
+
+    return val

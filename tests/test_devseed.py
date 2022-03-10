@@ -3,13 +3,9 @@ from pathlib import Path
 import pendulum
 from pypika import Query
 
-from devseed import __version__, devseed
+from devseed import devseed
 
 FIXTURES = Path("tests/fixtures")
-
-
-def test_version():
-    assert __version__.startswith("2022")
 
 
 def describe_successful_parsing_of_fixtures():
