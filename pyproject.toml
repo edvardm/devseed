@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "devseed"
-version = "2022.10.1004+alpha"
+version = "0.1.0"
 description = "Tool to seed database using YAML files"
 authors = ["Edvard Majakari <edvard@majakari.net>"]
 
@@ -34,8 +34,8 @@ build-backend = "poetry.core.masonry.api"
 devseed = "devseed.devseed:app"
 
 [tool.bumpver]
-current_version = "2022.10.1004+alpha"
-version_pattern = "YYYY.0W.BUILD[+TAG]"
+current_version = "0.1.0"
+version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
 tag = true
@@ -44,3 +44,4 @@ push = true
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
 "devseed/__init__.py" = ['__version__ = "{version}"']
+"README.md" = ["{version}"]
