@@ -7,7 +7,7 @@ import typer
 import yaml
 from pg8000.exceptions import DatabaseError
 
-from devseed import config, db, transformers
+from devseed import __version__, config, db, transformers
 from devseed.errors import InvalidEntry
 from devseed.types import Params
 
@@ -27,7 +27,12 @@ def seed(
     limit: int = 10000,
     import_from: str | None = None,
     out: Path | None = None,
+    version: bool = False,
 ):
+    if version:
+        typer.echo(__version__)
+        sys.exit(0)
+
     if verbose:
         typer.echo(f"Using {config.CFG_PATH} as config file")
 
