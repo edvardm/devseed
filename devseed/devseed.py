@@ -1,7 +1,7 @@
 import re
 import sys
 from pathlib import Path
-from typing import Any, TextIO
+from typing import Any, Optional, TextIO
 
 import rich
 import typer
@@ -16,19 +16,34 @@ app = typer.Typer()
 
 
 # Main entry point for app
+# TODO: consider splitting to 'seed' and 'import'
 @app.command()
 def seed(
-    seed_dir: Path = config.DEFAULT_SEED_DIR,
-    verbose: bool = False,
-    db_name: str = "postgres",
-    dry_run: bool = False,
-    force: bool = False,
-    schema: str = "",
-    glob: str = config.DEFAULT_GLOB,
-    limit: int = 10000,
-    import_from: str | None = None,
-    out: Path | None = None,
-    version: bool = False,
+    seed_dir: Path = typer.Argument(  # noqa: B008
+        config.DEFAULT_SEED_DIR, help="Seed data directory"
+    ),
+    verbose: bool = typer.Option(False, help="Be more verbose"),  # noqa: B008
+    db_name: str = typer.Option(  # noqa: B008
+        "postgres", help="Database to connect to"
+    ),
+    dry_run: bool = typer.Option(  # noqa: B008
+        False, help="Only show what would be done"
+    ),
+    force: bool = typer.Option(  # noqa: B008
+        False, help="Overwrite files instead of quitting"
+    ),
+    schema: str = typer.Option("", help="Schema to use for tables"),  # noqa: B008
+    glob: str = typer.Option(  # noqa: B008
+        config.DEFAULT_GLOB, help="file glob to match YAML files with"
+    ),
+    count: int = typer.Option(256, help="Sample size for import data"),  # noqa: B008
+    import_from: Optional[str] = typer.Option(  # noqa: B008
+        None, help="directory to import from"
+    ),
+    out: Optional[Path] = typer.Option(  # noqa: B008
+        None, help="Output file for YAML imported from db"
+    ),
+    version: bool = typer.Option(False, help="Show version and exit"),  # noqa: B008
 ):
     if version:
         typer.echo(__version__)
@@ -45,7 +60,7 @@ def seed(
         force=force,
         schema=schema,
         glob=glob,
-        limit=limit,
+        limit=count,
         import_from=import_from,
         out=out,
     )
