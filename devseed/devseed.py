@@ -1,3 +1,4 @@
+import re
 import sys
 from pathlib import Path
 from typing import Any, TextIO
@@ -62,13 +63,17 @@ def seed(
                 with out.open("w") as fh:
                     import_yaml_from_table(ctx, conn, fh)
             else:
-                insert(conn, schema, seed_dir, glob)
+                if not seed_dir.exists() or not seed_dir.is_dir():
+                    abort(f"{seed_dir} does not exist or is not a directory")
+                insert_all(conn, schema, seed_dir, glob)
     except DatabaseError as exc:
         # TODO: cleanup
         err = exc.args[0]
-        msg = err["M"]
-        detail = err["D"]
-        abort(f"{msg}\n{detail}")
+        msg = [err["M"]]
+        if detail := err.get("D"):
+            msg.append(detail)
+
+        abort("\n".join(msg))
 
 
 def import_yaml_from_table(ctx: Params, conn, out: TextIO):
@@ -88,7 +93,7 @@ def abort(msg):
     sys.exit(1)
 
 
-def insert(db_conn, schema: str, seed_dir: Path, glob: str) -> None:
+def insert_all(db_conn, schema: str, seed_dir: Path, glob: str) -> None:
     cur = db_conn.cursor()
 
     for query in files_to_sql(seed_dir, glob, schema=schema):
@@ -97,7 +102,7 @@ def insert(db_conn, schema: str, seed_dir: Path, glob: str) -> None:
 
 
 def files_to_sql(seed_dir: Path, glob: str, schema: str = ""):
-    for pth in seed_dir.rglob(glob):
+    for pth in sorted(seed_dir.rglob(glob)):
         entries = _parse_yaml(pth)
 
         if isinstance(entries, dict):
@@ -116,12 +121,18 @@ def _parse_yaml(fpath: Path) -> dict[str, Any]:
         return yaml.safe_load(fh)
 
 
-def _entry_list_gen(entries, pth, schema):
+def _entry_list_gen(entries, pth: Path, schema: str):
+    # Default case: YAML contains list of entries
+
+    # strip any sort prefix if present
+    tbl = re.sub(r"^\d+_", "", pth.stem)
+
     for entry in entries:
-        yield transformers.dict_to_sql(schema, pth.stem, entry)
+        yield transformers.dict_to_sql(schema, tbl, entry)
 
 
 def _entry_dict_gen(entries, schema):
+    # YAML file contained name of table to use
     for tbl, val in entries.items():
         for entry in val:
             yield transformers.dict_to_sql(schema, tbl, entry)
