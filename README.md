@@ -37,7 +37,7 @@ before making the PR.
 ## TODO
 
 - Convenient install
-- Reverse, importing YAML from database dump?
+- Add ON CONFLICT DO NOTHING to avoid duplicate entry errors when requested
 - Consider supporting factory models
 
 [![CI](https://github.com/edvardm/devseed/actions/workflows/ci.yml/badge.svg)](https://github.com/edvardm/devseed/actions/workflows/ci.yml)

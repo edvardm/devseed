@@ -3,7 +3,7 @@ from pathlib import Path
 import pendulum
 from pypika import Query
 
-from devseed import devseed
+from devseed import main
 
 FIXTURES = Path("tests/fixtures")
 
@@ -44,4 +44,4 @@ def describe_successful_parsing_of_fixtures():
 
 
 def parse_me(fpath):
-    return next(devseed.files_to_sql(FIXTURES, fpath))
+    return next(main.yaml_to_sql(FIXTURES / fpath))
