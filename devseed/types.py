@@ -3,14 +3,14 @@ from pathlib import Path
 
 
 @dataclass
-class Params:
-    seed_dir: Path
-    glob: str
-    verbose: bool
+class ImportParams:
     db_name: str
     dry_run: bool
     force: bool
-    schema: str
+    import_from: str
     limit: int
-    import_from: str | None
-    out: Path | None
+    schema: str
+    verbose: bool
+
+    compact: bool = False
+    out: Path = Path("-")

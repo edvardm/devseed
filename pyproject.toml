@@ -4,16 +4,25 @@ version = "0.1.4"
 description = "Tool to seed database using YAML files"
 authors = ["Edvard Majakari <edvard@majakari.net>"]
 
+[tool.black]
+# side-by-side diffs are a thing, but I guess my screen is wide enough :3
+line-length = 110
+
+[tool.isort]
+profile = "black"
+
 [tool.poetry.dependencies]
 python = "^3.10"
 PyYAML = "^6.0"
 funcy = "^1.17"
-typer = {extras = ["all"], version = "^0.4.0"}
+typer = { extras = ["all"], version = "^0.4.0" }
 environs = "^9.5.0"
 pendulum = "^2.1.2"
 PyPika = "^0.48.8"
 pg8000 = "^1.24.1"
 rich = "^11.2.0"
+loguru = "^0.6.0"
+orjson = "^3.6.7"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.931"
@@ -26,13 +35,21 @@ freezegun = "^1.2.0"
 pytest-icdiff = "^0.5"
 pytest-cov = "^3.0.0"
 icecream = "^2.1.2"
+commitizen-emoji = "^0.1.5"
+pylint = "^2.12.2"
+invoke = "^1.6.0"
 
+
+[tool.commitizen]
+name = "cz_commitizen_emoji"
+version = "0.1.4"
+tag_format = "$version"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-devseed = "devseed.devseed:app"
+devseed = "devseed.main:app"
 
 [tool.bumpver]
 current_version = "0.1.4"

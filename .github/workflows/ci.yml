@@ -23,4 +23,4 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-root
       - name: Run tests
-        run: poetry run pytest --durations 3 -vv --cov-branch --cov devseed --cov-report term
+        run: poetry run inv test-cov
