@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "devseed"
-version = "0.1.4"
+version = "0.1.6"
 description = "Tool to seed database using YAML files"
 authors = ["Edvard Majakari <edvard@majakari.net>"]
 
@@ -42,7 +42,7 @@ invoke = "^1.6.0"
 
 [tool.commitizen]
 name = "cz_commitizen_emoji"
-version = "0.1.4"
+version = "0.1.6"
 tag_format = "$version"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -52,7 +52,7 @@ build-backend = "poetry.core.masonry.api"
 devseed = "devseed.main:app"
 
 [tool.bumpver]
-current_version = "0.1.4"
+current_version = "0.1.6"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
